@@ -1,9 +1,9 @@
 from cleaning import clean_data
-from analysis import run_analysis
 
 def main():
-    data = clean_data("data/sales_data.csv")
-    run_analysis(data)
+    data = clean_data("data/SuperStoreOrders.csv")
+    print("Data cleaned successfully")
+    print(data.head())
 
 if __name__ == "__main__":
     main()
