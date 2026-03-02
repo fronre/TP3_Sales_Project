@@ -1,27 +1,32 @@
 import pandas as pd
 
 def clean_data(path):
-    """
-    Load and clean the sales dataset.
-    - Remove duplicates
-    - Handle missing values
-    - Convert date columns
-    """
 
-    # Load dataset
     data = pd.read_csv(path)
 
-    # Remove duplicate rows
     data.drop_duplicates(inplace=True)
 
-    # Convert date columns to datetime
-    data['order_date'] = pd.to_datetime(data['order_date'])
-    data['ship_date'] = pd.to_datetime(data['ship_date'])
+    data['order_date'] = pd.to_datetime(
+        data['order_date'],
+        format="%d-%m-%Y",
+        errors="coerce"
+    )
 
-    # Remove missing values
+    data['ship_date'] = pd.to_datetime(
+        data['ship_date'],
+        format="%d-%m-%Y",
+        errors="coerce"
+    )
+
+    # Convert numeric columns
+    data['sales'] = pd.to_numeric(data['sales'], errors='coerce')
+    data['profit'] = pd.to_numeric(data['profit'], errors='coerce')
+    data['quantity'] = pd.to_numeric(data['quantity'], errors='coerce')
+    data['discount'] = pd.to_numeric(data['discount'], errors='coerce')
+    data['shipping_cost'] = pd.to_numeric(data['shipping_cost'], errors='coerce')
+
     data.dropna(inplace=True)
 
-    # Save cleaned dataset
     data.to_csv("output/cleaned_data.csv", index=False)
 
     return data
