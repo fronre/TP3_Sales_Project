@@ -1,9 +1,11 @@
 from cleaning import clean_data
+from analysis import run_analysis
+
 
 def main():
     data = clean_data("data/SuperStoreOrders.csv")
-    print("Data cleaned successfully")
-    print(data.head())
+    run_analysis(data)
+
 
 if __name__ == "__main__":
     main()
