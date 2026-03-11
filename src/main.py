@@ -3,19 +3,10 @@ from analysis import run_analysis, customer_segmentation
 
 
 def main():
-
-    print("===== Starting Data Analysis Project =====")
-
-    # Step 1: Clean the dataset
-    data = clean_data("data/SuperStoreOrders.csv")
-
-    # Step 2: Run Exploratory Data Analysis
+    data = clean_data("data/data.csv")
     run_analysis(data)
 
-    # Step 3: Apply Machine Learning (Customer Segmentation)
-    data = customer_segmentation(data)
-
-    print("===== Project Completed Successfully =====")
+    customer_segmentation(data)
 
 
 if __name__ == "__main__":

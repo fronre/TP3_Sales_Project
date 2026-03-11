@@ -5,58 +5,35 @@ def clean_data(path):
 
     print("Loading dataset...")
 
-    data = pd.read_csv(path)
+    data = pd.read_csv(path, encoding="ISO-8859-1")
 
-    print("Initial dataset shape:", data.shape)
+    print("Original shape:", data.shape)
 
     # Remove duplicates
     data.drop_duplicates(inplace=True)
 
-    # Convert date columns
-    data['order_date'] = pd.to_datetime(
-        data['order_date'],
-        format="%d-%m-%Y",
-        errors="coerce"
-    )
+    # Convert date
+    data["InvoiceDate"] = pd.to_datetime(data["InvoiceDate"])
 
-    data['ship_date'] = pd.to_datetime(
-        data['ship_date'],
-        format="%d-%m-%Y",
-        errors="coerce"
-    )
+    # Remove rows without CustomerID
+    data.dropna(subset=["CustomerID"], inplace=True)
 
-    # Convert numeric columns
-    numeric_columns = [
-        "sales",
-        "profit",
-        "quantity",
-        "discount",
-        "shipping_cost"
-    ]
+    # Remove negative or zero quantities
+    data = data[data["Quantity"] > 0]
 
-    for col in numeric_columns:
-        data[col] = pd.to_numeric(data[col], errors="coerce")
+    # Remove negative prices
+    data = data[data["UnitPrice"] > 0]
 
-    # Remove rows with missing values
-    data.dropna(inplace=True)
+    # Create Sales column
+    data["Sales"] = data["Quantity"] * data["UnitPrice"]
 
-    # Remove incorrect negative values
-    data = data[data["sales"] >= 0]
-    data = data[data["quantity"] >= 0]
+    # Extract year and month
+    data["Year"] = data["InvoiceDate"].dt.year
+    data["Month"] = data["InvoiceDate"].dt.month
 
-    # Create new useful columns
-    data["order_year"] = data["order_date"].dt.year
-    data["order_month"] = data["order_date"].dt.month
-    data["profit_margin"] = data["profit"] / data["sales"]
-
-    # Sort data by order date
-    data.sort_values(by="order_date", inplace=True)
-
-    print("Cleaned dataset shape:", data.shape)
+    print("Cleaned shape:", data.shape)
 
     # Save cleaned dataset
     data.to_csv("output/cleaned_data.csv", index=False)
-
-    print("Cleaned data saved to output/cleaned_data.csv")
 
     return data

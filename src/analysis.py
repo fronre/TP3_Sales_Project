@@ -11,19 +11,20 @@ def run_analysis(data):
     print("\n===== Descriptive Statistics =====")
     print(data.describe())
 
-    # Sales trend over years
-    sales_over_time = data.groupby(data["order_date"].dt.year)["sales"].sum()
+    # Sales trend over time
+    sales_trend = data.groupby(data["InvoiceDate"].dt.date)["Sales"].sum()
 
     plt.figure()
-    sales_over_time.plot(kind="line", marker="o")
-    plt.title("Sales Trend Over Years")
-    plt.xlabel("Year")
+    sales_trend.plot()
+    plt.title("Sales Trend Over Time")
+    plt.xlabel("Date")
     plt.ylabel("Total Sales")
+    plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
 
     # Top 10 products
-    top_products = data.groupby("product_name")["sales"].sum().nlargest(10)
+    top_products = data.groupby("Description")["Sales"].sum().nlargest(10)
 
     plt.figure()
     top_products.plot(kind="bar")
@@ -34,13 +35,13 @@ def run_analysis(data):
     plt.tight_layout()
     plt.show()
 
-    # Sales by region
-    region_sales = data.groupby("region")["sales"].sum()
+    # Sales by country
+    country_sales = data.groupby("Country")["Sales"].sum()
 
     plt.figure()
-    region_sales.plot(kind="bar")
-    plt.title("Sales by Region")
-    plt.xlabel("Region")
+    country_sales.plot(kind="bar")
+    plt.title("Sales by Country")
+    plt.xlabel("Country")
     plt.ylabel("Total Sales")
     plt.tight_layout()
     plt.show()
@@ -57,25 +58,30 @@ def run_analysis(data):
 
 def customer_segmentation(data):
     """
-    Apply KMeans clustering for simple customer segmentation
+    Customer segmentation using KMeans
     """
 
-    print("\n===== Customer Segmentation using KMeans =====")
+    print("\n===== Customer Segmentation (KMeans) =====")
 
-    # Select features
-    X = data[["sales", "profit"]]
+    # Aggregate customer data
+    customer_data = data.groupby("CustomerID").agg({
+        "Sales": "sum",
+        "Quantity": "sum"
+    }).reset_index()
 
-    # Apply KMeans
+    # Apply clustering
+    X = customer_data[["Sales", "Quantity"]]
+
     kmeans = KMeans(n_clusters=3, random_state=42)
-    data["cluster"] = kmeans.fit_predict(X)
+    customer_data["cluster"] = kmeans.fit_predict(X)
 
     # Plot clusters
     plt.figure()
-    plt.scatter(data["sales"], data["profit"], c=data["cluster"])
+    plt.scatter(customer_data["Sales"], customer_data["Quantity"], c=customer_data["cluster"])
     plt.title("Customer Segmentation")
-    plt.xlabel("Sales")
-    plt.ylabel("Profit")
+    plt.xlabel("Total Sales")
+    plt.ylabel("Quantity Purchased")
     plt.tight_layout()
     plt.show()
 
-    return data
+    return customer_data
