@@ -13,19 +13,25 @@ def clean_data(path):
     data.drop_duplicates(inplace=True)
 
     # Convert date
-    data["InvoiceDate"] = pd.to_datetime(data["InvoiceDate"])
+    data["InvoiceDate"] = pd.to_datetime(data["order_date"], format='mixed', errors='coerce')
+
+    # Drop rows with invalid dates
+    data.dropna(subset=["InvoiceDate"], inplace=True)
 
     # Remove rows without CustomerID
-    data.dropna(subset=["CustomerID"], inplace=True)
+    data.dropna(subset=["customer_name"], inplace=True)
 
     # Remove negative or zero quantities
-    data = data[data["Quantity"] > 0]
+    data = data[data["quantity"] > 0]
 
-    # Remove negative prices
-    data = data[data["UnitPrice"] > 0]
-
-    # Create Sales column
-    data["Sales"] = data["Quantity"] * data["UnitPrice"]
+    # Since UnitPrice not available, use sales as Sales
+    data["Sales"] = pd.to_numeric(data["sales"], errors='coerce')
+    data.dropna(subset=["Sales"], inplace=True)
+    data["Quantity"] = pd.to_numeric(data["quantity"], errors='coerce')
+    data.dropna(subset=["Quantity"], inplace=True)
+    data["Description"] = data["product_name"]
+    data["Country"] = data["country"]
+    data["CustomerID"] = data["customer_name"]
 
     # Extract year and month
     data["Year"] = data["InvoiceDate"].dt.year
