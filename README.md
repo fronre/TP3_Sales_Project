@@ -1,33 +1,47 @@
-# Sales Data Analysis Project using Python
+# 📊 Sales Data Analysis Project
 
-## 🚀 نظرة عامة على المشروع
+## 🚀 Overview
 
-هذا المشروع يعرض تحليل بيانات مبيعات حقيقي باستخدام Python. يتم فيه تنظيف البيانات، إجراء تحليل استكشافي، وتقسيم العملاء باستخدام خوارزمية K-Means.
+This project presents a complete **end-to-end data analysis pipeline** using **Python** and **Power BI**.
 
-الهدف من المشروع هو استخراج رؤى مهمة حول:
+It covers:
 
-- 📦 أداء المنتجات
-- 🌍 توزيع المبيعات حسب البلد
-- 👥 سلوك العملاء
+* Data cleaning & preprocessing
+* Exploratory Data Analysis (EDA)
+* Customer segmentation using Machine Learning
+* Interactive dashboard visualization
 
-## 📁 بنية المشروع
+🎯 The goal is to transform raw sales data into **actionable business insights**.
 
-```text
-TP3_Sales_Project
+---
+
+## 🧠 Objectives
+
+* 📈 Analyze sales performance over time
+* 🥇 Identify top-performing products
+* 🌍 Explore sales distribution across countries
+* 👥 Segment customers based on behavior
+* 📊 Build an interactive Power BI dashboard
+
+---
+
+## 🏗️ Project Structure
+
+```
+TP3_Sales_Project/
 │
-├── data
+├── data/
 │   └── SuperStoreOrders.csv
 │
-├── output
+├── output/
 │   ├── cleaned_data.csv
-│   └── figures
-│       ├── figure_1_sales_trend.png
-│       ├── figure_2_top_products.png
-│       ├── figure_3_country_sales.png
-│       ├── figure_4_heatmap.png
-│       └── figure_5_customer_clusters.png
+│   ├── figure_1_sales_trend.png
+│   ├── figure_2_top_products.png
+│   ├── figure_3_country_sales.png
+│   ├── figure_4_heatmap.png
+│   └── figure_5_customer_clusters.png
 │
-├── src
+├── src/
 │   ├── cleaning.py
 │   ├── analysis.py
 │   └── main.py
@@ -36,112 +50,154 @@ TP3_Sales_Project
 └── README.md
 ```
 
-## 📦 وصف مجموعة البيانات
+---
 
-البيانات موجودة في `data/SuperStoreOrders.csv` وتحتوي على سجلات معاملات المبيعات.
+## 📦 Dataset Description
 
-تشمل الأعمدة الأساسية:
+The dataset contains transactional sales records with the following key features:
 
-- 📅 `order_date`: تاريخ المعاملة
-- 🚚 `ship_date`: تاريخ الشحن
-- 🧍‍♂️ `customer_name`: اسم العميل
-- 🌍 `country`: البلد
-- 📦 `product_name`: وصف المنتج
-- 💰 `sales`: قيمة المبيعات
-- 🔢 `quantity`: الكمية المباعة
-- 📉 `discount`: الخصم المطبق
-- 📈 `profit`: الربح
-- 🏷️ `category` / `sub_category`: تصنيف المنتج
+| Feature     | Description                |
+| ----------- | -------------------------- |
+| InvoiceDate | Transaction date           |
+| CustomerID  | Unique customer identifier |
+| Country     | Customer location          |
+| Description | Product name               |
+| Sales       | Revenue generated          |
+| Quantity    | Number of units sold       |
 
-## 🧹 تنظيف البيانات
+---
 
-يتم تنفيذ تنظيف البيانات في `src/cleaning.py` عبر Pandas.
+## 🧹 Data Cleaning
 
-العمليات التي تمت:
+Performed using **Pandas** in `cleaning.py`.
 
-- ❌ حذف التكرارات
-- 🚫 حذف الصفوف غير الصالحة أو المفقودة
-- 📅 تحويل عمود `order_date` إلى نوع تاريخ
-- 🔢 تحويل `sales` و `quantity` إلى قيم رقمية
-- 🧾 إنشاء مجموعة بيانات نظيفة جاهزة للتحليل
+### Steps:
 
-الملف الناتج:
+* ❌ Removed missing values
+* 🔁 Removed duplicate records
+* 📅 Converted date columns
+* 🔢 Ensured numeric consistency
 
-- `output/cleaned_data.csv`
+📁 Output:
 
-## 🔎 التحليل الاستكشافي للبيانات (EDA)
+```
+output/cleaned_data.csv
+```
 
-يتم تنفيذ التحليل الاستكشافي في `src/analysis.py`.
+---
 
-التحليلات الناتجة تشمل:
+## 🔎 Exploratory Data Analysis (EDA)
 
-- 📈 اتجاه المبيعات بمرور الوقت
-- 🥇 أفضل 10 منتجات حسب المبيعات
-- 🌍 المبيعات حسب البلد
-- 🔗 خريطة الارتباط للمتغيرات العددية
+Performed in `analysis.py`.
 
-### الصور الناتجة
+### 📊 Key Visualizations:
 
-![Sales Trend](output/figures/figure_1_sales_trend.png)
+* 📈 **Sales Trend Over Time**
+* 🥇 **Top 10 Products**
+* 🌍 **Sales by Country**
+* 🔗 **Correlation Heatmap**
 
-![Top Products](output/figures/figure_2_top_products.png)
+---
 
-![Country Sales](output/figures/figure_3_country_sales.png)
+## 🤖 Customer Segmentation
 
-![Correlation Heatmap](output/figures/figure_4_heatmap.png)
+Applied **K-Means Clustering** to group customers based on:
 
-## 🤖 تقسيم العملاء
+* Total Sales
+* Total Quantity
 
-يستخدم المشروع خوارزمية K-Means في `src/analysis.py` لتقسيم العملاء بناءً على:
+### Segments:
 
-- إجمالي المبيعات لكل عميل
-- إجمالي الكمية المشتراة
+* 🟢 High-value customers
+* 🟡 Medium-value customers
+* 🔴 Low-value customers
 
-ينتج عن ذلك ثلاث مجموعات:
+---
 
-- 🟢 عملاء ذوي قيمة عالية
-- 🟡 عملاء متوسطو القيمة
-- 🔴 عملاء ذوو قيمة منخفضة
+## 📊 Power BI Dashboard
 
-![Customer Clusters](output/figures/figure_5_customer_clusters.png)
+An interactive dashboard was created for dynamic data exploration.
 
-## 🛠 التقنيات المستخدمة
+🔗 **Access Dashboard:**
+https://app.powerbi.com/links/hicPspR_38?ctid=fa7e31a0-d802-442a-a11d-dd99271b08bb
 
-- 🐍 Python
-- 🐼 Pandas
-- 🔢 NumPy
-- 📉 Matplotlib
-- 🎨 Seaborn
-- 🤖 Scikit-learn
+### Features:
 
-## ▶️ طريقة التشغيل
+* KPI cards (Sales, Quantity, Customers)
+* Top products visualization
+* Country analysis
+* Time-based trends
+* Interactive filters (slicers)
 
-1. تثبيت المتطلبات:
+---
 
-```bash
+## 🛠️ Technologies Used
+
+* 🐍 Python
+* 🐼 Pandas
+* 🔢 NumPy
+* 📉 Matplotlib
+* 🎨 Seaborn
+* 🤖 Scikit-learn
+* 📊 Power BI
+
+---
+
+## ▶️ How to Run
+
+### 1. Install dependencies
+
+```
 pip install -r requirements.txt
 ```
 
-2. تشغيل السكربت الرئيسي:
+### 2. Run the project
 
-```bash
+```
 python src/main.py
 ```
 
-3. سيتم إنشاء البيانات النظيفة والصور في المجلد `output/`.
+### 3. Output
 
-## � لوحة Power BI
+* Cleaned dataset → `output/cleaned_data.csv`
+* Visualizations → `output/`
 
-يمكنك مشاهدة التقرير التفاعلي في Power BI عبر الرابط التالي:
+---
 
-https://app.powerbi.com/links/hicPspR_38?ctid=fa7e31a0-d802-442a-a11d-dd99271b08bb&pbi_source=linkShare&bookmarkGuid=4e4bbf70-42fd-464b-b042-bfa149a63549
+## 📈 Key Insights
 
-## �📌 ملاحظات
+* Certain products dominate total sales
+* Sales distribution varies significantly across countries
+* A small group of customers contributes most of the revenue
+* Customer segmentation helps identify high-value customers
 
-- إذا تغير اسم الملف أو بنية البيانات، حدث المسار في `src/main.py`.
-- استخدم `output/figures/` للاطلاع على الصور الناتجة.
+---
 
-## 👤 المؤلف
+## 📌 Future Improvements
 
-Hala Mohammed islam
+* Add real-time data integration
+* Enhance dashboard interactivity
+* Deploy as a web application
+* Use advanced ML models
 
+---
+
+## 👤 Author
+
+**Islam Mohammed**
+
+---
+
+## ⭐ Project Value
+
+This project demonstrates:
+
+* Real-world data analysis workflow
+* Integration between Python and Power BI
+* Data-driven decision-making
+
+---
+
+## 📬 Contact
+
+Feel free to reach out for collaboration or questions.
